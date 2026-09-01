@@ -1,2 +1,1 @@
-# EFMcommon
-Common Donor Analysis with EuroForMix
+Provides methods for evaluating common donor relationships between DNA profiles using probabilistic deconvolution results from EuroForMix and EFMmps. The package implements common-donor likelihood ratio and deconvolution-based compatibility calculations for pairwise profile comparisons, together with probabilistic methods for clustering multiple profiles according to their inferred donor origin. The methods are applicable to DNA mixture comparison and single-cell forensic genetic analysis.
