@@ -1,0 +1,11 @@
+Package: EFMcommon
+Type: Package
+Title: Common Donor Analysis with EuroForMix
+Version: 0.1.0
+Author: Oyvind Bleka
+Maintainer: Oyvind Bleka <oyvble@hotmail.com>
+Description: Provides methods for evaluating common donor relationships between DNA profiles using probabilistic deconvolution results from EuroForMix and EFMmps.
+License: GPL-3
+Suggests: euroformix, EFMmps
+Encoding: UTF-8
+NeedsCompilation: no
