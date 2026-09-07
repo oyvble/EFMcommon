@@ -9,3 +9,5 @@ License: GPL-3
 Suggests: euroformix, EFMmps
 Encoding: UTF-8
 NeedsCompilation: no
+Config/roxygen2/version: 8.1.0
+RoxygenNote: 7.3.2

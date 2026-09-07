@@ -1,17 +1,16 @@
+---
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE )
+```
+
 
 # EFMcommon
-
-Provides methods for evaluating common donor relationships between DNA
-profiles using probabilistic deconvolution results from EuroForMix and
-EFMmps. The package implements common-donor likelihood ratio and
-deconvolution-based compatibility calculations for pairwise profile
-comparisons, together with probabilistic methods for clustering multiple
-profiles according to their inferred donor origin. The methods are
-applicable to DNA mixture comparison and single-cell forensic genetic
-analysis.
+Provides methods for evaluating common donor relationships between DNA profiles using probabilistic deconvolution results from EuroForMix and EFMmps. The package implements common-donor likelihood ratio and deconvolution-based compatibility calculations for pairwise profile comparisons, together with probabilistic methods for clustering multiple profiles according to their inferred donor origin. The methods are applicable to DNA mixture comparison and single-cell forensic genetic analysis.
 
 ## Installation
-
 Installation directly from source through GitHub (does not require
 compilation):
 
@@ -25,8 +24,7 @@ remotes::install_github("oyvble/EFMcommon")
 ### Part 1: Using euroformix
 
 #### Step 1: Load software and data
-
-``` r
+```{r}
 library(euroformix)
 library(EFMcommon)
 pkg = path.package("EFMcommon") #get package install folder
@@ -46,19 +44,19 @@ evidData = euroformix::sample_tableToList(euroformix::tableReader(evidfn)) #read
 ```
 
 #### Step 2: Perform model fit and DC for each sample separately
-
-``` r
+```{r}
 fitList = list()
 for(sampleName in names(evidData)) {
+#  i=1
   NOC = length(strsplit(sampleName,"_")[[1]])
   mlefit = euroformix::calcMLE(NOC,evidData[sampleName],popFreq, kit=kit, BWS=FALSE,FWS=FALSE,AT = AT,fst = fst) 
   DC = euroformix::deconvolve(mlefit,alpha=1)
   fitList[[sampleName]] = list(MLE=mlefit,DC=DC) #attach
 }
 ```
-
 #### Step 3: Excecute full clustering
-
-``` r
+```{r}
 commonCluster = calcCommonCluster(fitList,mergeThresh = 1)
 ```
+
+

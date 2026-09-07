@@ -1,0 +1,2 @@
+importFrom("stats", "setNames")
+exportPattern("^[[:alpha:]]+")
