@@ -27,9 +27,6 @@ calcGenoProb = function(freq,nU=1,fst=0,nTyped=NULL) {
   
   #PRESTEP: GET GENOTYPE OUTCOME: SIMILAR TO getGlist function
   av <- names(freq)   
-  suppressWarnings({   
-   if(!any(is.na(as.numeric(av))) )  av <-  as.numeric(av) #convert to numbers if 
-  })
   
   #G-matrix is the vectorized upper triangular (1,1),(1,2),...,(1,n),(2,2),(2,3),...,(2,n),....,(n,n)
   G = numeric()

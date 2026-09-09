@@ -24,7 +24,7 @@
 #' @param Qallele Name of compound drop-out alleles
 #' @param returnPrepared Whether returning the pre-processed objects
 
-# mergeThresh = 1; Fst=NULL; mxThresh=0.01; Qallele="99"; returnOnlyPrepared=FALSE
+# mergeThresh = 0; Fst=NULL; mxThresh=0.01; Qallele="99"; returnOnlyPrepared=FALSE
 calcCommonCluster = function(fitList, mergeThresh = 0, Fst=NULL, mxThresh=0.01, Qallele="99", returnPrepared=FALSE) {
   sampleNames = names(fitList)
   if(is.null(sampleNames)) stop("Sample name must be given to the fitList")
@@ -70,14 +70,15 @@ calcCommonCluster = function(fitList, mergeThresh = 0, Fst=NULL, mxThresh=0.01, 
     markers_Sample = markerList[[sample]]
     uRangePerSample[[sample]] = uRange
     for(marker in markers_Sample) {
-#     marker = markersAll[1];sample = sampleNames[1]
+#     marker = markersAll[20];sample = sampleNames[1]
         
       #Obtaining allele details (used for prior)
       mind = which(markerList[[sample]]==marker) #obtain marker index
       mrng = c$startIndMarker_nAlleles[mind] + seq_len(c$nAlleles[mind])
       sample_alleles = c$alleleNames[mrng]
       sample_freqs = setNames(c$freqs[mrng],sample_alleles)
-
+      sample_freqs = sample_freqs[order(names(sample_freqs))] #important to order first
+      
       #calculate the prior
       genoProbList = calcGenoProb(sample_freqs,nU=1,fst=c$fst[mind],nTyped=c$maTyped[mrng])
       genoProbs = setNames(genoProbList$Gprob,getGenoVecName(genoProbList$G))
@@ -99,6 +100,7 @@ calcCommonCluster = function(fitList, mergeThresh = 0, Fst=NULL, mxThresh=0.01, 
   #Structuring data with respect to common alleles (also adapt global prior here)
   likEvidPerMarker <- genosAllPerMarker <- priorGlobalPerMarker <- list() 
   for(marker in markersAll) {
+#    marker = "TPOX"
     allelesList = alleleOutcomePerMarkerSample[[marker]]
     allelesAll = sort(unique(unlist(allelesList)))
     nAlleles = length(allelesAll)
@@ -151,6 +153,12 @@ calcCommonCluster = function(fitList, mergeThresh = 0, Fst=NULL, mxThresh=0.01, 
     if(is.null(DCtab)) stop("No deconvolution information obtained, cannot progress further!")
     sample_Urange = uRangePerSample[[sampleName]]  #Obtain unknown range for sample
     
+    #Important step is to make alleles in genotype "right order"
+    DCtab = DCtab[DCtab[,1]!="",,drop=FALSE]
+    DCgenoMat = getGenosAsMatrix(DCtab[,3])
+    swap = DCgenoMat[,2]<DCgenoMat[,1]
+    if(any(swap)) DCtab[swap,3] = getGenoVecName(DCgenoMat[swap,2:1,drop=FALSE])
+    
     #traversing per-marker
     sample_markers = markerList[[sampleName]]
     for(marker in sample_markers) {
@@ -158,6 +166,7 @@ calcCommonCluster = function(fitList, mergeThresh = 0, Fst=NULL, mxThresh=0.01, 
       if(is.null(allelesSample)) next #skip if not found
       DCtab_marker = DCtab[DCtab[,2]==marker,,drop=FALSE ] #filter relevant
       
+      allelesAsNumeric = as.numeric(allelesSample)
       toGenoNameMat = genosAllPerMarker[[marker]] #get matrix
       toGenoNameMissing = getMissingGenos(toGenoNameMat,allelesSample,Qallele) #get updated genos
       

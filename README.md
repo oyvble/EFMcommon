@@ -33,7 +33,6 @@ pkg = path.package("EFMcommon") #get package install folder
 
 #Settings:
 kit = "ESX17" 
-fst = 0.03
 AT = 100 #analytical threshold used (global for all markers)
 
 #Import allele frequencies
@@ -50,8 +49,9 @@ evidData = euroformix::sample_tableToList(euroformix::tableReader(evidfn)) #read
 ``` r
 fitList = list()
 for(sampleName in names(evidData)) {
+#  i=1
   NOC = length(strsplit(sampleName,"_")[[1]])
-  mlefit = euroformix::calcMLE(NOC,evidData[sampleName],popFreq, kit=kit, BWS=FALSE,FWS=FALSE,AT = AT,fst = fst) 
+  mlefit = euroformix::calcMLE(NOC,evidData[sampleName],popFreq, kit=kit, BWS=FALSE,FWS=FALSE,AT = AT) 
   DC = euroformix::deconvolve(mlefit,alpha=1)
   fitList[[sampleName]] = list(MLE=mlefit,DC=DC) #attach
 }
@@ -61,4 +61,5 @@ for(sampleName in names(evidData)) {
 
 ``` r
 commonCluster = calcCommonCluster(fitList,mergeThresh = 1)
+finalCluster = commonCluster$clusterList #Obtain final clustering
 ```
