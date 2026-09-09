@@ -1,5 +1,9 @@
 Future TODO:
 
+v0.1.3 (Release date: 2026-09-09)
+=============================================
+- Fixed small bug in showClusterTable causing it to not run.
+
 v0.1.2 (Release date: 2026-09-08)
 =============================================
 - Added functions for visualization of clustering: 

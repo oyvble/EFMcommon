@@ -55,15 +55,19 @@ showClusterTable = function(clusterList, maxWidth = 150, fontSize = 12, palette 
   # Create gt table
   #########################
   
+  #Create column-width specification
+  widthSpec = rlang::new_formula(
+    lhs = rlang::expr(gt::everything()),
+    rhs = gt::px(maxWidth)
+  )
+  
   gtTab = gt::gt(tab) |>
     gt::sub_missing(missing_text = "") |>
     gt::cols_align(
       align = "left",
       columns = gt::everything()
     ) |>
-    gt::cols_width(
-      gt::everything() ~ gt::px(maxWidth)
-    ) |>
+    gt::cols_width(.list = list(widthSpec)) |>
     gt::tab_options(
       data_row.padding = gt::px(3),
       column_labels.padding = gt::px(5),
